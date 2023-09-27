@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Scores</title>
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSeZ6g1RQgLtlnzJjpDDBOPeuv8F4MRlMH8g&usqp=CAU);
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-shadow: #ccc;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            background-color: rgb(118, 216, 245);
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="number"],
+        button {
+            margin: 5px;
+            padding: 8px;
+            width: 150px;
+            border: 1px solid;
+            border-radius: 5px;
+            text-shadow: #ccc;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            background-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+        button {
+            background-color: transparent;
+            backdrop-filter: blur(1px);
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: transparent;
+            backdrop-filter: blur(8px);
+        }
+        .delete-button {
+            background-color: #ff5555;
+        }
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1><i>ADD INFORMATION</i></h1>
+    <form id="myForm">
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="fatherName" placeholder="Father's Name">
+        <input type="number" id="score" placeholder="Score">
+        <button type="button" onclick="addToTable()">Add</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Father's Name</th>
+                <th>Score</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Table content will be added here -->
+        </tbody>
+    </table>
+    <script>
+        function addToTable() {
+            // Get input values
+            var nameValue = document.getElementById("name").value;
+            var fatherNameValue = document.getElementById("fatherName").value;
+            var scoreValue = parseFloat(document.getElementById("score").value); // Parse Score as Float
+            // Create a new table row
+            var tableBody = document.getElementById("tableBody");
+            var newRow = tableBody.insertRow();
+            // Insert cell values
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+            var cell4 = newRow.insertCell(3);
+            var cell5 = newRow.insertCell(4);
+            cell1.innerHTML = nameValue;
+            cell2.innerHTML = fatherNameValue;
+            cell3.innerHTML = scoreValue;
+            // Calculate the new total score
+            var total = 0;
+            var tableRows = tableBody.getElementsByTagName("tr");
+            for (var i = 0; i < tableRows.length; i++) {
+                var rowScore = parseFloat(tableRows[i].getElementsByTagName("td")[2].innerHTML);
+                if (!isNaN(rowScore)) {
+                    total += rowScore;
+                }
+            }
+            cell4.innerHTML = total.toFixed(0);
+            // Create a delete button for the new row
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.className = "delete-button";
+            deleteButton.onclick = function() {
+                deleteRow(newRow);
+            };
+            cell5.appendChild(deleteButton);
+            // Clear input fields
+            document.getElementById("name").value = "";
+            document.getElementById("fatherName").value = "";
+            document.getElementById("score").value = "";
+        }
+        function deleteRow(row) {
+            var tableBody = document.getElementById("tableBody");
+            tableBody.removeChild(row);
+            // Recalculate the total score after deleting a row
+            var total = 0;
+            var tableRows = tableBody.getElementsByTagName("tr");
+            for (var i = 0; i < tableRows.length; i++) {
+                var rowScore = parseFloat(tableRows[i].getElementsByTagName("td")[2].innerHTML);
+                if (!isNaN(rowScore)) {
+                    total += rowScore;
+                }
+            }
+            // Update the total in the last row
+            var lastRow = tableRows[tableRows.length - 1];
+            var totalCell = lastRow.getElementsByTagName("td")[3];
+            totalCell.innerHTML = total.toFixed(0);
+        }
+    </script>
+</body>
+</html>
